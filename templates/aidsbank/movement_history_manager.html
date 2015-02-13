@@ -1,0 +1,30 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title" id="myModalLabel">Storia movimenti {{ asset }}</h4>
+        </div>
+        <div class="modal-body">
+            <table cellspacing='0' class='table table-bordered table-hover'>
+                <tr>
+                    <th>Data</th>
+                    <th>Operatore</th>
+                    <th>Tipo</th>
+                    <th>Status</th>
+                    <th>Note</th>
+                </tr>
+                {% for movement in object_list %}
+                <tr>
+                    <td>{{ movement.date }}</td>
+                    <td>{{ movement.manager }}</td>
+                    <td>{{ movement.get_type_display }}</td>
+                    <td>{{ movement.get_status_display }}</td>
+                    <td>{{ movement.notes }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="modal-footer">
+        </div>
+    </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->

@@ -1,0 +1,103 @@
+{% extends 'base_site.html' %}
+{% load compressed %}
+{% load aidsbank_tags %}
+{% load pages_tags %}
+{% load news_tags %}
+
+{% block extra_css %}
+    {% compressed_css 'news' %}
+{% endblock %}
+
+{% block extra_js%}
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+{% endblock %}
+
+{% block title %}
+    Banco Ausili | Profilo Utente
+{% endblock %}
+
+{% block content %}
+    <section>
+        <h1>{{ object.user.first_name }} {{ object.user.last_name }}</h1>
+        <!-- Modal -->
+        <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        </div><!-- /.modal -->
+        <p>Di seguito le informazioni registrate</p>
+        <table cellspacing='0' class='table table-bordered table-hovered'>
+            <tr>
+                <th>Email</th>
+                <td>{{ object.user.email }}</td>
+            </tr>
+            <tr>
+                <th>Indirizzo</th>
+                <td>{{ object.address }}</td>
+            </tr>
+            <tr>
+                <th>Cap</th>
+                <td>{{ object.cap }}</td>
+            </tr>
+            <tr>
+                <th>Città</th>
+                <td>{{ object.city }}</td>
+            </tr>
+            <tr>
+                <th>Provincia</th>
+                <td>{{ object.province }}</td>
+            </tr>
+            <tr>
+                <th>Telefono</th>
+                <td>{{ object.phone }}</td>
+            </tr>
+        </table>
+        <p><a href="{% url 'applicant_profile_form' %}" class="btn btn-default">modifica profilo</a></p>
+    </section>
+
+    {% if object.get_loans.count %}
+        <h2>Richieste di prestito</h2>
+            {% for loan in object.get_loans %}
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h3 style="margin: 0;">{{ loan.asset.aid.name }} - {{ loan.asset.code }}</h3></div>
+                    <div class="panel-body">
+                        <p><strong>Data prenotazione</strong>: {{ loan.reservation_date }}</p>
+                        <p><strong>Stato prestito</strong>: {{ loan.get_status_display }}</p>
+                        {% if loan.addressee %}
+                            <p><strong>Destinatario</strong>: {{ loan.addressee }}</p>
+                        {% endif %}
+                        {% if loan.place %}
+                            <p><strong>Luogo di destinazione</strong>: {{ loan.place }}</p>
+                        {% endif %}
+                        {% if loan.deposit %}
+                            <p><strong>Cauzione</strong>: {{ loan.deposit }}€</p>
+                        {% endif %}
+                        {% if loan.loan_date %}
+                            <p><strong>Data prestito</strong>: {{ loan.loan_date }}</p>
+                        {% endif %}
+                        {% if loan.loan_duration %}
+                            <p><strong>Durata prestito</strong>: {{ loan.loan_duration }} mesi</p>
+                        {% endif %}
+                        {% if loan.renewal_date %}
+                            <p><strong>Data rinnovo</strong>: {{ loan.renewal_date }}</p>
+                        {% endif %}
+                        {% if loan.return_date %}
+                            <p><strong>Data restituzione</strong>: {{ loan.return_date }}</p>
+                        {% endif %}
+                        {% if loan.loan_date and loan.renewal_available and not loan.renewal_date %}
+                            <p>rinnovo</p>
+                        {% endif %}
+                        {% if loan.status == 4 and perms.aidsbank.publish_asset_comments %}
+                            <p><a class="btn btn-default" data-toggle="modal" href="{% url 'applicant_asset_comment_form' loan.asset.id %}" data-target="#modal">Commenta</a></p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            </dl>
+        </table>
+    {% endif %}
+{% endblock %}
+
+{% block sidebar %}
+    {% profile_box %}
+    {% login_box %}
+    {% news_showcase %}
+{% endblock %}
+

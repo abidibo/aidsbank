@@ -1,0 +1,65 @@
+{% extends 'base_site.html' %}
+{% load compressed %}
+{% load aidsbank_tags %}
+{% load pages_tags %}
+{% load news_tags %}
+
+{% block extra_css %}
+    {% compressed_css 'news' %}
+{% endblock %}
+
+{% block extra_js%}
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+{% endblock %}
+
+{% block content %}
+<section>
+    <h1>Moderazione commenti</h1>
+    <!-- Modal -->
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    </div><!-- /.modal -->
+    <table cellspacing='0' class="table table-bordered table-hover">
+        <tr>
+            <th>Data</th>
+            <th>Centro</th>
+            <th>Ausilio</th>
+            <th>Cespite</th>
+            <th>Commento</th>
+            <th>Richiedente</th>
+            <th>Azioni</th>
+        </tr>
+        {% for comment in object_list %}
+        <tr>
+            <td>{{ comment.date }}</td>
+            <td>{{ comment.asset.centre }}</td>
+            <td>{{ comment.asset.aid }}</td>
+            <td>{{ comment.asset.code }}</td>
+            <td>{{ comment.text }}</td>
+            <td>{{ comment.applicant }}</td>
+            <td>
+                <a href="{% url 'asset_comment_approve_manager' comment.id %}" class="fa fa-check-circle" title="approva commento" data-tooltip data-toggle="modal" data-target="#modal"></a>
+                <a href="{% url 'asset_comment_delete_manager' comment.id %}" class="fa fa-times-circle" title="elimina commento" data-tooltip data-toggle="modal" data-target="#modal"></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <script>
+        $('body').on('hidden.bs.modal', '.modal', function () {
+            $(this).removeData('bs.modal');
+        });
+    </script>
+</section>
+{% endblock %}
+
+{% block sidebar %}
+    {% if request.user|is_applicant %}
+        {% profile_box %}
+    {% endif %}
+    {% if request.user|is_manager %}
+        {% manager_menu %}
+    {% endif %}
+    {% if not request.user.id %}
+        {% login_box %}
+    {% endif %}
+    {% news_showcase %}
+{% endblock %}

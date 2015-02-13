@@ -1,0 +1,41 @@
+{% extends 'base_site.html' %}
+{% load compressed %}
+{% load aidsbank_tags %}
+{% load pages_tags %}
+{% load news_tags %}
+
+{% block extra_css %}
+    {% compressed_css 'news' %}
+{% endblock %}
+
+{% block content %}
+    <section>
+        <h1>{{ applicant.user.first_name }} {{ applicant.user.last_name }}</h1>
+        <p>Modifica del profilo</p>
+        <form method='post' class="form" role="form" action=''>
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for field in form %}
+                <div class="form-group">
+                    {% if field.errors %}
+                        <ul class="form-errors">
+                        {% for error in field.errors %}
+                            <li><span class="fa fa-exclamation-triangle"></span> <strong>{{ error|escape }}</strong></li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                    {{ field.label_tag }} {{ field }} 
+                    {% if field.help_text %}<div class="form-helptext">{{ field.help_text }}</div>{% endif %}
+                </div>
+            {% endfor %}
+            <div class="form-group">
+                <input type="submit" class="btn btn-primary" value="modifica" />
+            </div>
+        </form>
+    </section>
+{% endblock %}
+
+{% block sidebar %}
+    {% profile_box %}
+    {% news_showcase %}
+{% endblock %}

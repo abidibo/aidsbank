@@ -1,0 +1,25 @@
+<div class="modal-dialog modal-lg">
+    <div class="modal-content">
+        <form id="asset_comment_delete_form" method='post' class="form" role="form" action='{% url 'asset_comment_delete_manager' comment.id %}'>
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Eliminazione commento</h4>
+              </div>
+              <div class="modal-body">
+                    {% csrf_token %}
+                    <p>Sicuro di voler eliminare il commento:</p>
+                    <p>{{ comment.text }}</p>
+              <div class="modal-footer">
+                <input type="button" class="btn btn-default" data-dismiss="modal" value="annulla" />
+                <input type="submit" class="btn btn-primary" value="conferma" style="margin-bottom: 5px;" />
+              </div>
+        </form>
+    <script>
+        var form_options = {
+            target: '#modal',
+            success: function() {  }
+        }
+        $('#asset_comment_delete_form').ajaxForm(form_options);
+    </script>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->

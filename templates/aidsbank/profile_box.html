@@ -1,0 +1,13 @@
+{% if authenticated %}
+    <section>
+        <h1>Profilo</h1>
+        <p><a href="{% url 'applicant_profile' %}" title="modifica profilo">{{ user.first_name }} {{user.last_name}}</a></p>
+        {% if applicant %}
+            <p>{{ applicant.cap }} {{ applicant.city }}</p>
+        {% elif manager %}
+
+        {% endif %}
+        <p><a href="/accounts/logout/" class="btn btn-primary">logout</a></p>
+    </section>
+{% else %}
+{% endif %}

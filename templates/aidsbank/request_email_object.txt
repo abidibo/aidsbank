@@ -1,0 +1,1 @@
+E' stata effettuata una nuova richiesta di prestito dall'utente {{ applicant.user.first_name }} {{ applicant.user.last_name }}, per il cespite {{ asset.code }}.

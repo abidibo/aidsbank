@@ -1,0 +1,29 @@
+{% if manager %}
+<section>
+    <h1>Operazioni</h1>
+    <p>{{ manager.user.first_name }} {{ manager.user.last_name }}</p>
+    <nav>
+        <h2>Pratiche</h2>
+        <div class="list-group">
+            {% if can_change_loan %}
+                <a href="{% url 'loan_request_list_rejected_manager' %}" class="list-group-item"><span class="badge">{{ request_status_0_num }}</span>Rischieste respinte</a>
+                <a href="{% url 'loan_request_list_manager' %}" class="list-group-item"><span class="badge">{{ request_status_1_num }}</span>Rischieste in corso</a>
+                <a href="{% url 'loan_request_list_accepted_manager' %}" class="list-group-item"><span class="badge">{{ request_status_2_num }}</span>Pratiche aperte</a>
+                <a href="{% url 'loan_request_list_ready_manager' %}" class="list-group-item"><span class="badge">{{ request_status_3_num }}</span>Pronte alla consegna</a>
+                <a href="{% url 'loan_request_list_delivered_manager' %}" class="list-group-item"><span class="badge">{{ request_status_4_num }}</span>Consegnate</a>
+            {% endif %}
+        </div>
+        <h2>Gestione ausili</h2>
+        <div class="list-group">
+            <a class="list-group-item" href="{% url 'asset_create_manager' %}" class="list-group-item">Carica cespite</a>
+            <a class="list-group-item" href="{% url 'asset_list_manager' %}" class="list-group-item">Modifica/Muovi cespiti</a>
+        </div>
+        <h2>Gestione commenti</h2>
+        <div class="list-group">
+            <a class="list-group-item" href="{% url 'asset_comment_list_manager' %}" class="list-group-item"><span class="badge">{{ comments_to_be_approved_num }}</span>Moderazione commenti</a>
+            <a class="list-group-item" href="{% url 'asset_comment_published_list_manager' %}" class="list-group-item"><span class="badge">{{ comments_approved_num }}</span>Commenti pubblicati</a>
+        </div>
+    </nav>
+    <p><a href="/accounts/logout/" class="btn btn-primary">logout</a></p>
+</section>
+{% endif %}

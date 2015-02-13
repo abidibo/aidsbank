@@ -1,0 +1,66 @@
+{% extends 'base_site.html' %}
+{% load compressed %}
+{% load pages_tags %}
+{% load news_tags %}
+
+{% block extra_css %}
+    {% compressed_css 'news' %}
+{% endblock %}
+
+{% block content %}
+<section>
+    <h1>{{ object.name }}</h1>
+    <p><strong>Tipologia</strong>: {{ object.type }}</p>
+    {% if object.deposit %}
+        <p><strong>Cauzione</strong>: {{ object.deposit }}€</P>
+    {% endif %}
+    {% if object.card %}
+        <p><a href="{{ object.card.url }}"><span class="fa fa-download"></span> scheda</a></P>
+    {% endif %}
+    {{ object.description|safe }}
+    {% if assets.count %}
+        <table class="table table-bordered">
+            <tr>
+                <th>Centro</th>
+                <th>Codice</th>
+                <th>Colore</th>
+                {% if perms.aidsbank.view_asset_availability %}
+                    <th>Disponibile</th>
+                    <th></th>
+                {% endif %}
+            </tr>
+            {% for asset in assets %}
+                <tr>
+                    <td>{{ asset.centre }}</td>
+                    <td>{{ asset.code }}</td>
+                    <td>{{ asset.color }}</td>
+                    {% if perms.aidsbank.view_asset_availability %}
+                    <td>{{ asset.availability_info }}</td>
+                    <td><a href="{% url 'asset_request' asset.id %}" class="btn btn-default">richiedi prestito</a></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+    {% if assets.count %}
+        <h2>Commenti</h2>
+        {% for asset in assets %}
+            <h3>{{ asset }}</h3>
+            {% if asset.assetcomment_set.count %}
+                <dl>
+                    {% for comment in asset.assetcomment_set.all %}
+                        <dt>{{ comment.date }} | {{ comment.applicant }}</dt>
+                        <dd>{{ comment.text }}</dd>
+                    {% endfor %}
+                </dl>
+            {% else %}
+                <p>Non risultano commenti</p>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block sidebar %}
+    {% news_showcase %}
+{% endblock %}

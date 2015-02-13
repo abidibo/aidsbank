@@ -1,0 +1,62 @@
+{% extends 'base_site.html' %}
+{% load compressed %}
+{% load aidsbank_tags %}
+{% load pages_tags %}
+{% load news_tags %}
+
+{% block extra_css %}
+    {% compressed_css 'news' %}
+{% endblock %}
+
+{% block extra_js%}
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+{% endblock %}
+
+{% block content %}
+<section>
+    <h1>Cespiti</h1>
+    <!-- Modal -->
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    </div><!-- /.modal -->
+    <table cellspacing='0' class="table table-bordered table-hover">
+        <tr>
+            <th>Centro</th>
+            <th>Ausilio</th>
+            <th>Cespite</th>
+            <th>Status</th>
+            <th>Azioni</th>
+        </tr>
+        {% for asset in object_list %}
+        <tr>
+            <td>{{ asset.centre }}</td>
+            <td>{{ asset.aid }}</td>
+            <td>{{ asset.code }}</td>
+            <td>{{ asset.get_status }}</td>
+            <td>
+                <a href="{% url 'asset_edit_manager' asset.id %}" data-toggle="modal" data-target="#modal" class="fa fa-pencil" title="modifica cespite" data-tooltip></a>
+                <a href="{% url 'movement_create_manager' asset.id %}" data-toggle="modal" data-target="#modal" class="fa fa-exchange" title="segnala movimento" data-tooltip></a>
+                <a href="{% url 'movement_history' asset.id %}" data-toggle="modal" data-target="#modal" class="fa fa-history" title="storia movimenti" data-tooltip></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <script>
+        $('body').on('hidden.bs.modal', '.modal', function () {
+            $(this).removeData('bs.modal');
+        });
+    </script>
+</section>
+{% endblock %}
+
+{% block sidebar %}
+    {% if request.user|is_applicant %}
+        {% profile_box %}
+    {% endif %}
+    {% if request.user|is_manager %}
+        {% manager_menu %}
+    {% endif %}
+    {% if not request.user.id %}
+        {% login_box %}
+    {% endif %}
+    {% news_showcase %}
+{% endblock %}

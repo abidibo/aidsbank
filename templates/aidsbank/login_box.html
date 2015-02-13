@@ -1,0 +1,31 @@
+{% if not authenticated %}
+<section>
+    <h1>{{ title }}</h1>
+    {% if form.errors %}
+        <p>Utente e password errati</p>
+    {% endif %}
+
+    <form class="form" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+    {% csrf_token %}
+    <div class="form-group">
+        {{ form.username.label_tag }}
+        {{ form.username }}</td>
+    </div>
+    <div class="form-group">
+        {{ form.password.label_tag }}
+        {{ form.password }}
+    </div>
+    <div class="form-group">
+        <input type="submit" class="btn btn-primary" value="login" />
+        <input type="button" onclick="location.href='{% url 'registration_form' %}'" class="btn btn-default" value="registrati" />
+    </div>
+
+    {% if next %}
+        <input type="hidden" name="next" value="{{ next }}" />
+    {% else %}
+        <input type="hidden" name="next" value="/" />
+    {% endif %}
+    </form>
+
+</section>
+{% endif %}

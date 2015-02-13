@@ -1,0 +1,57 @@
+{% extends 'base_site.html' %}
+{% load compressed %}
+{% load aidsbank_tags %}
+{% load pages_tags %}
+{% load news_tags %}
+
+{% block extra_css %}
+    {% compressed_css 'news' %}
+{% endblock %}
+
+{% block extra_js%}
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+{% endblock %}
+
+{% block content %}
+<section>
+    <h1>Pratiche consegnate</h1>
+    <!-- Modal -->
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    </div><!-- /.modal -->
+
+    <table class="table table-bordered table-hovered "cellspacing='0'>
+        <tr>
+            <th>Ausilio</th>
+            <th>Cespite</th>
+            <th>Stato cespite</th>
+            <th>Data richiesta</th>
+            <th>Richiedente</th>
+            <th>Azioni</th>
+        </tr>
+        {% for loan in object_list %}
+            <tr>
+                <td>{{ loan.asset.aid.name }}</td>
+                <td>{{ loan.asset }}</td>
+                <td>DA AGGIUNGERE</td>
+                <td>{{ loan.reservation_date }}</td>
+                <td>{{ loan.applicant.user.first_name }} {{ loan.applicant.user.last_name }}</td>
+                <td>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+</section>
+{% endblock %}
+
+{% block sidebar %}
+    {% if request.user|is_applicant %}
+        {% profile_box %}
+    {% endif %}
+    {% if request.user|is_manager %}
+        {% manager_menu %}
+    {% endif %}
+    {% if not request.user.id %}
+        {% login_box %}
+    {% endif %}
+    {% news_showcase %}
+{% endblock %}

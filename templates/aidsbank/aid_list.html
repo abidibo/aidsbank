@@ -1,0 +1,36 @@
+{% extends 'base_site.html' %}
+{% load compressed %}
+{% load pages_tags %}
+{% load news_tags %}
+
+{% block extra_css %}
+    {% compressed_css 'news' %}
+{% endblock %}
+
+{% block content %}
+<section>
+    <h1>Ausili</h1>
+    <table class="table table-bordered table-hovered">
+        <tr>
+            <th>Tipologia</th>
+            <th>Ausilio</th>
+            <th>Codice</th>
+            <th>Scheda</th>
+            <th>Cespiti</th>
+        </tr>
+        {% for aid in object_list %}
+        <tr>
+            <td>{{ aid.type }}</td>
+            <td><a href="{{ aid.get_absolute_url }}">{{ aid.name }}</a></td>
+            <td>{{ aid.code }}</td>
+            <td>{% if aid.card %}<a href="{{ aid.card.url }}"><span class="fa fa-download"></span></a>{% endif %}</td>
+            <td>{{ aid.asset_set.count }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</section>
+{% endblock %}
+
+{% block sidebar %}
+    {% news_showcase %}
+{% endblock %}

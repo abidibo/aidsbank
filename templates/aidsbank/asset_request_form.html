@@ -1,0 +1,32 @@
+{% extends 'base_site.html' %}
+{% load compressed %}
+{% load aidsbank_tags %}
+{% load pages_tags %}
+{% load news_tags %}
+
+{% block extra_css %}
+    {% compressed_css 'news' %}
+{% endblock %}
+
+{% block content %}
+    <section>
+        <h1>Richiesta prestito - {{ asset.code }}</h1>
+        {{ asset.aid.description|safe }}
+        <p><strong>Colore</strong>: {{ asset.color }}</p>
+        <p><strong>Stato</strong>: {{ asset.get_status }}</p>
+        <p><strong>Data richiesta</strong>: {% now "d/m/Y" %}</p>
+        <p><strong>Cauzione richiesta</strong>: {{ asset.aid.deposit }}€</p>
+        <form method='post' class="form" role="form" action=''>
+            {% csrf_token %}
+             <div class="form-group">
+                <input type="submit" class="btn btn-default" value="procedi" />
+                <input type="button" class="btn btn-default" value="annulla" onclick="location.href='{% url "aid_detail" asset.aid.slug %}'" />
+            </div>
+        </form>
+    </section>
+{% endblock %}
+
+{% block sidebar %}
+    {% profile_box %}
+    {% news_showcase %}
+{% endblock %}

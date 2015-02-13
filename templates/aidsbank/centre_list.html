@@ -1,0 +1,32 @@
+{% extends 'base_site.html' %}
+{% load compressed %}
+{% load pages_tags %}
+{% load news_tags %}
+
+{% block extra_css %}
+    {% compressed_css 'news' %}
+{% endblock %}
+
+{% block content %}
+<section>
+    <h1>Centri</h1>
+    {% for centre in object_list %}
+    <h2>{{ centre.name }}</h2>
+    <p><span class="fa fa-map-marker"></span> {{ centre.address }}, {{ centre.cap }} {{ centre.city }}</p>
+    <p><span class="fa fa-envelope"></span> <a href="mailto:{{ centre.email }}">{{ centre.email }}</a></p>
+    <p><span class="fa fa-phone"></span> {{ centre.phone }}</p>
+    {% if centre.fax %}
+        <p><span class="fa fa-fax"></span> Fax. {{ centre.fax }}</p>
+    {% endif %}
+    {{ centre.description|safe }}
+    {% if centre.timetable %}
+    <h3>Orari</h3>
+    {{ centre.timetable|safe }}
+    {% endif %}
+    {% endfor %}
+</section>
+{% endblock %}
+
+{% block sidebar %}
+    {% news_showcase %}
+{% endblock %}

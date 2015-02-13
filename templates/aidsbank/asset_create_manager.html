@@ -1,0 +1,59 @@
+{% extends 'base_site.html' %}
+{% load compressed %}
+{% load aidsbank_tags %}
+{% load pages_tags %}
+{% load news_tags %}
+
+{% block extra_css %}
+    {% compressed_css 'news' %}
+{% endblock %}
+
+{% block content %}
+<section>
+    <h1>Carica cespite</h1>
+    <form name="create_asset" method='post' class="form" role="form" action=''>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <div class="form-group">
+                {% if field.errors %}
+                    <ul class="form-errors">
+                    {% for error in field.errors %}
+                        <li><span class="fa fa-exclamation-triangle"></span> <strong>{{ error|escape }}</strong></li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+                {% if field.label = 'Cespite' %}
+                    {{ field.label_tag }} {{ object.asset }} {{ field }} 
+                {% elif field.label = 'Richiedente' %}
+                    {{ field.label_tag }} {{ object.applicant.user.first_name }} {{ object.applicant.user.last_name }} {{ field }} 
+                {% elif field.label = 'Stato' %}
+                    {{ field.label_tag }} {{ object.get_status_display }} {{ field }} 
+                {% elif field.label = 'Data di prenotazione' %}
+                    {{ field.label_tag }} {{ object.reservation_date }} {{ field }} 
+                {% else %}
+                    {{ field.label_tag }} {{ field }} 
+                {% endif %}
+                {% if field.help_text %}<div class="form-helptext">{{ field.help_text }}</div>{% endif %}
+            </div>
+        {% endfor %}
+        <input type="submit" class="btn btn-primary" value="salva" style="margin-bottom: 5px;" />
+    </form>
+    <script>
+        jQuery('form[name=create_asset] .calendar').datepicker({ dateFormat: "yy-mm-dd" });
+    </script>
+</section>
+{% endblock %}
+
+{% block sidebar %}
+    {% if request.user|is_applicant %}
+        {% profile_box %}
+    {% endif %}
+    {% if request.user|is_manager %}
+        {% manager_menu %}
+    {% endif %}
+    {% if not request.user.id %}
+        {% login_box %}
+    {% endif %}
+    {% news_showcase %}
+{% endblock %}
